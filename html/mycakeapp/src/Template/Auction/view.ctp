@@ -29,8 +29,26 @@
 	<td><?= h($biditem->created) ?></td>
 </tr>
 <tr>
-	<th scope="row"><?= __('終了した？') ?></th>
-	<td><?= $biditem->finished ? __('Yes') : __('No'); ?></td>
+	<th scope="row"><?= __('残り時間') ?></th>
+	<td id="demo">
+		<script> 
+			var deadline = new Date('<?= h($biditem->endtime) ?>'); 
+			var count = setInterval(function() { 
+			var now = new Date().getTime(); 
+			var distance = deadline - now; 
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24)); 
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000); 
+			document.getElementById("demo").innerHTML = days + "日 "  
+			+ hours + "時間 " + minutes + "分 " + seconds + "秒 "; 
+				if (distance < 0) { 
+						clearInterval(count); 
+						document.getElementById("demo").innerHTML = "終了しました。"; 
+				}
+			}, 1000);
+		</script>
+	</td>
 </tr>
 </table>
 <div class="related">
