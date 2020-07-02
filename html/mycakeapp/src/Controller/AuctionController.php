@@ -115,10 +115,13 @@ class AuctionController extends AuctionBaseController
 						// トップページ（index）に移動
 						return $this->redirect(['action' => 'index']);
 					}
+					// データ保存失敗時のメッセージ
+					$this->Flash->error(__('保存に失敗しました。もう一度入力してください。'));		
 				}
+				// 画像アップロードに失敗した場合のメッセージ
 				$this->Flash->error(__('出品画像の保存に失敗しました。再度アップロードしてください。'));
 			}
-			// 失敗時のメッセージ
+			// アップロードされた画像の拡張子が許可されたものでなかった場合のメッセージ
 			$this->Flash->error(__('保存に失敗しました。出品画像は、「jpg」、「gif」、「png」いずれかの拡張子でアップロードしてください。'));
 		}
 		// 値を保管
