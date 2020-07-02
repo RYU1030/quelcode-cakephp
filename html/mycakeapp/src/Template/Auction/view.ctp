@@ -30,21 +30,21 @@
 </tr>
 <tr>
 	<th scope="row"><?= __('残り時間') ?></th>
-	<td id="demo">
+	<td id="countDown">
 		<script> 
-			var deadline = new Date('<?= h($biditem->endtime) ?>'); 
+			var endTime = new Date('<?= h($biditem->endtime) ?>'); 
 			var count = setInterval(function() { 
 			var now = new Date().getTime(); 
-			var distance = deadline - now; 
+			var distance = endTime - now; 
 			var days = Math.floor(distance / (1000 * 60 * 60 * 24)); 
 			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
 			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
 			var seconds = Math.floor((distance % (1000 * 60)) / 1000); 
-			document.getElementById("demo").innerHTML = days + "日 "  
+			document.getElementById("countDown").innerHTML = days + "日 "  
 			+ hours + "時間 " + minutes + "分 " + seconds + "秒 "; 
 				if (distance < 0) { 
 						clearInterval(count); 
-						document.getElementById("demo").innerHTML = "終了しました。"; 
+						document.getElementById("countDown").innerHTML = "終了しました。"; 
 				}
 			}, 1000);
 		</script>
