@@ -13,6 +13,14 @@
 	<td><?= $this->Number->format($biditem->id) ?></td>
 </tr>
 <tr>
+	<th scope="row">商品詳細</th>
+	<td><?= h($biditem->details) ?></td>
+</tr>
+<tr>
+	<th scope="row">出品画像</th>
+	<td><?= $this->Html->image('/img/biditems/' . h($biditem->image_name), array('height'=>100, 'width'=>100)) ?></td>
+</tr>
+<tr>
 	<th scope="row">終了時間</th>
 	<td><?= h($biditem->endtime) ?></td>
 </tr>
@@ -21,8 +29,26 @@
 	<td><?= h($biditem->created) ?></td>
 </tr>
 <tr>
-	<th scope="row"><?= __('終了した？') ?></th>
-	<td><?= $biditem->finished ? __('Yes') : __('No'); ?></td>
+	<th scope="row"><?= __('残り時間') ?></th>
+	<td id="countDown">
+		<script> 
+			var endTime = new Date('<?= h($biditem->endtime) ?>'); 
+			var count = setInterval(function() { 
+			var now = new Date().getTime(); 
+			var distance = endTime - now; 
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24)); 
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000); 
+			document.getElementById("countDown").innerHTML = days + "日 "  
+			+ hours + "時間 " + minutes + "分 " + seconds + "秒 "; 
+				if (distance < 0) { 
+						clearInterval(count); 
+						document.getElementById("countDown").innerHTML = "終了しました。"; 
+				}
+			}, 1000);
+		</script>
+	</td>
 </tr>
 </table>
 <div class="related">
