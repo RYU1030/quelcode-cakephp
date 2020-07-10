@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use App\Model\Entity\Bidinfo;
 use Cake\Event\Event; // added.
 use Exception; // added.
 
@@ -206,5 +206,27 @@ class AuctionController extends AuctionBaseController
 			'order'=>['created'=>'desc'],
 			'limit' => 10])->toArray();
 		$this->set(compact('biditems'));
+	}
+
+	// 取引成立後の画面
+	public function contact($bidinfo_id = null)
+	{
+		// idが$bidinfo_idのBidinfoを変数$bidinfoに格納
+		$bidinfo = $this->Bidinfo->get($bidinfo_id, [
+			'contain' => ['Biditems', 'Biditems.Users']
+		]);
+
+		// 出品者ID、落札者IDをそれぞれ定義
+		$exhibitor_id = $bidinfo->biditem->user_id;
+		$bidder_id = $bidinfo->user_id;
+
+		// 上の二つをアクセスを許可するユーザのIDに設定
+		$permitted_id = array($exhibitor_id, $bidder_id);
+
+		// ログイン中のユーザIDが$permitted_idに含まれない場合は、アクセスを許可せずindexにリダイレクト
+		if (!in_array($this->Auth->user('id'), $permitted_id)) {
+			return $this->redirect(['action' => 'index']);
+		}
+		$this->set(compact('bidinfo', 'exhibitor_id', 'bidder_id'));
 	}
 }
