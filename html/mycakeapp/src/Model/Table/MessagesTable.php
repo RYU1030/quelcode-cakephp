@@ -37,6 +37,8 @@ class MessagesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Timestamp');
+
         $this->belongsTo('Bidinfo', [
             'foreignKey' => 'bidinfo_id',
             'joinType' => 'INNER',
@@ -63,16 +65,6 @@ class MessagesTable extends Table
             ->scalar('message')
             ->requirePresence('message', 'create')
             ->notEmptyString('message');
-
-        $validator
-            ->dateTime('created_at')
-            ->requirePresence('created_at', 'create')
-            ->notEmptyDateTime('created_at');
-
-        $validator
-            ->dateTime('updated_at')
-            ->requirePresence('updated_at', 'create')
-            ->notEmptyDateTime('updated_at');
 
         return $validator;
     }

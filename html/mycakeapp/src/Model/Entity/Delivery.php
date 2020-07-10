@@ -36,8 +36,8 @@ class Delivery extends Entity
         'mobile_number' => true,
         'is_shipped' => true,
         'is_received' => true,
-        'created_at' => true,
-        'updated_at' => true,
+        'created' => true,
+        'modified' => true,
         'bidinfo' => true,
     ];
 }

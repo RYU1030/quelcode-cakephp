@@ -36,6 +36,8 @@ class RatingsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Timestamp');
+
         $this->belongsTo('Bidinfo', [
             'foreignKey' => 'bidinfo_id',
             'joinType' => 'INNER',
@@ -73,16 +75,6 @@ class RatingsTable extends Table
             ->scalar('comments')
             ->requirePresence('comments', 'create')
             ->notEmptyString('comments');
-
-        $validator
-            ->dateTime('created_at')
-            ->requirePresence('created_at', 'create')
-            ->notEmptyDateTime('created_at');
-
-        $validator
-            ->dateTime('updated_at')
-            ->requirePresence('updated_at', 'create')
-            ->notEmptyDateTime('updated_at');
 
         return $validator;
     }

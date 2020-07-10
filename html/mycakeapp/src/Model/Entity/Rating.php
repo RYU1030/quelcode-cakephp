@@ -34,8 +34,8 @@ class Rating extends Entity
         'rated_by' => true,
         'ratings' => true,
         'comments' => true,
-        'created_at' => true,
-        'updated_at' => true,
+        'created' => true,
+        'modified' => true,
         'bidinfo' => true,
     ];
 }
