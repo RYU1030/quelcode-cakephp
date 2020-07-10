@@ -17,6 +17,7 @@
 		<td><?= h($info->created) ?></td>
 		<td class="actions">
 			<?= $this->Html->link(__('View'), ['action' => 'msg', $info->id]) ?>
+			<?= $this->Html->link(__('Contact'), ['action' => 'contact', $info->id]) ?>
 		</td>
 	</tr>
 	<?php endforeach; ?>
@@ -33,4 +34,3 @@
 	</ul>
 </div>
 <h6><?= $this->Html->link(__('出品情報に移動 >>'), ['action' => 'home2']) ?></h6>
-
