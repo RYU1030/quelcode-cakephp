@@ -36,7 +36,7 @@ class DeliveriesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Bidinfos', [
+        $this->belongsTo('Bidinfo', [
             'foreignKey' => 'bidinfo_id',
             'joinType' => 'INNER',
         ]);
@@ -104,7 +104,7 @@ class DeliveriesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['bidinfo_id'], 'Bidinfos'));
+        $rules->add($rules->existsIn(['bidinfo_id'], 'Bidinfo'));
 
         return $rules;
     }
