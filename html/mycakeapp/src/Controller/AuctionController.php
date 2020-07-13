@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Model\Entity\Bidinfo;
 use Cake\Event\Event; // added.
 use Exception; // added.
 
@@ -22,6 +21,8 @@ class AuctionController extends AuctionBaseController
 		$this->loadModel('Bidrequests');
 		$this->loadModel('Bidinfo');
 		$this->loadModel('Bidmessages');
+		$this->loadModel('Deliveries');
+		$this->loadModel('Messages');
 		// ログインしているユーザー情報をauthuserに設定
 		$this->set('authuser', $this->Auth->user());
 		// レイアウトをauctionに変更
@@ -212,7 +213,8 @@ class AuctionController extends AuctionBaseController
 	public function contact($bidinfo_id = null)
 	{
 		// idが$bidinfo_idのBidinfoを変数$bidinfoに格納
-		$bidinfo = $this->Bidinfo->get($bidinfo_id, [
+		try {
+			$bidinfo = $this->Bidinfo->get($bidinfo_id, [
 			'contain' => ['Biditems', 'Biditems.Users']
 		]);
 
@@ -220,13 +222,68 @@ class AuctionController extends AuctionBaseController
 		$exhibitor_id = $bidinfo->biditem->user_id;
 		$bidder_id = $bidinfo->user_id;
 
-		// 上の二つをアクセスを許可するユーザのIDに設定
+		// 上の二つをアクセスを許可するユーザのIDに設定し配列$permitted_idに格納
 		$permitted_id = array($exhibitor_id, $bidder_id);
 
 		// ログイン中のユーザIDが$permitted_idに含まれない場合は、アクセスを許可せずindexにリダイレクト
 		if (!in_array($this->Auth->user('id'), $permitted_id)) {
 			return $this->redirect(['action' => 'index']);
 		}
-		$this->set(compact('bidinfo', 'exhibitor_id', 'bidder_id'));
+		// Messageを新たに用意
+		$message = $this->Messages->newEntity();
+		// $deliveryを
+		$deliveryInfo = $this->Deliveries->newEntity();
+		// POST送信時の処理
+		if ($this->request->is('post')) {
+			// 送信されたフォームで$bidmsgを更新
+			$message = $this->Messages->patchEntity($message, $this->request->getData());
+			// Messageを保存
+			if ($this->Messages->save($message)) {
+				$this->Flash->success(__('保存しました。'));
+			} else {
+				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			}
+		}
+		// bidinfo_idが$bidinfo_idの$deliverToを取得する
+		try {
+			$deliverTo = $this->Deliveries->find('all', [
+			'conditions'=>['bidinfo_id'=>$bidinfo_id]
+			])->first();
+		} catch (Exception $e) {
+			$deliverTo = null;
+		}
+			
+		// Messageをbidinfo_idとuser_idで検索
+		$messages = $this->Messages->find('all',[
+			'conditions'=>['bidinfo_id'=>$bidinfo_id],
+			'contain' => ['Users'],
+			'order'=>['created'=>'asc']]);
+
+		$this->set(compact(
+			'bidinfo_id', 'message', 'messages', 'deliveryInfo', 'deliverTo',
+			'bidinfo', 'exhibitor_id', 'bidder_id'
+		));
+		
+		} catch(Exception $e) {
+			$bidinfo = null;
+		}	
 	}
+
+	public function delivery()
+	{
+		$deliveryInfo = $this->Deliveries->newEntity();
+		// POST送信時の処理
+		if ($this->request->is('post')) {
+			// 送信されたフォームで$bidmsgを更新
+			$deliveryInfo = $this->Deliveries->patchEntity($deliveryInfo, $this->request->getData());
+			// Deliveryを保存
+			if ($this->Deliveries->save($deliveryInfo)) {
+				$this->Flash->success(__('保存しました。'));
+				return $this->redirect(['action' => 'contact', $deliveryInfo->bidinfo_id]);
+			} else {
+				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			}
+		}
+	}
+
 }
