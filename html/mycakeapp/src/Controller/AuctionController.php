@@ -261,7 +261,7 @@ class AuctionController extends AuctionBaseController
 
 		$this->set(compact(
 			'bidinfo_id', 'message', 'messages', 'deliveryInfo', 'deliverTo',
-			'bidinfo', 'exhibitor_id', 'bidder_id'
+			'bidinfo', 'permitted_id', 'exhibitor_id', 'bidder_id'
 		));
 		
 		} catch(Exception $e) {
@@ -284,6 +284,26 @@ class AuctionController extends AuctionBaseController
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}
 		}
+	}
+
+	public function itemShipped() 
+	{
+		$deliveryId = $this->request->query['id'];
+		$deliveryInfo = $this->Deliveries->get($deliveryId);
+		$deliveryInfo->is_shipped = 1;
+		$this->Deliveries->save($deliveryInfo);
+
+		return $this->redirect(['action'=>'contact', $deliveryInfo->bidinfo_id]);
+	}
+
+	public function itemReceived()
+	{
+		$deliveryId = $this->request->query['id'];
+		$deliveryInfo = $this->Deliveries->get($deliveryId);
+		$deliveryInfo->is_received = 1;
+		$this->Deliveries->save($deliveryInfo);
+
+		return $this->redirect(['action'=>'contact', $deliveryInfo->bidinfo_id]);
 	}
 
 }
