@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Deliveries Model
  *
- * @property \App\Model\Table\BidinfosTable&\Cake\ORM\Association\BelongsTo $Bidinfos
+ * @property \App\Model\Table\BidinfoTable&\Cake\ORM\Association\BelongsTo $Bidinfos
  *
  * @method \App\Model\Entity\Delivery get($primaryKey, $options = [])
  * @method \App\Model\Entity\Delivery newEntity($data = null, array $options = [])
