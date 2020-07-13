@@ -23,6 +23,7 @@ class AuctionController extends AuctionBaseController
 		$this->loadModel('Bidmessages');
 		$this->loadModel('Deliveries');
 		$this->loadModel('Messages');
+		$this->loadModel('Ratings');
 		// ログインしているユーザー情報をauthuserに設定
 		$this->set('authuser', $this->Auth->user());
 		// レイアウトをauctionに変更
@@ -229,9 +230,11 @@ class AuctionController extends AuctionBaseController
 		if (!in_array($this->Auth->user('id'), $permitted_id)) {
 			return $this->redirect(['action' => 'index']);
 		}
+		// Ratingを新たに用意
+		$rating = $this->Ratings->newEntity();
 		// Messageを新たに用意
 		$message = $this->Messages->newEntity();
-		// $deliveryを
+		// deliveyInfoを新たに用意
 		$deliveryInfo = $this->Deliveries->newEntity();
 		// POST送信時の処理
 		if ($this->request->is('post')) {

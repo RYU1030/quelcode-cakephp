@@ -1,8 +1,24 @@
 <?php if (!empty($bidinfo)): ?>
   <h2>「<?= $bidinfo->biditem->name ?>」の配送情報</h2>
-  <?php if ((int)$deliverTo->is_shipped === 1 && (int)$deliverTo->is_received === 1) :?>
-    <h3>取引完了</h3>
-
+  <?php if (isset($deliverTo) && (int)$deliverTo->is_shipped === 1 && (int)$deliverTo->is_received === 1) :?>
+    <h3>取引完了。取引相手を評価してください。</h3>
+    <?= $this->Form->create($rating, ['controller'=>'Ratings', 'action'=>'add']) ?>
+    <table>
+      <tr>
+        <th>満足度（5段階）</th>
+        <td>
+          <?= $this->Form->select('select', 
+            ['1'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5])
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <th>コメント</th>
+        <td><?= $this->Form->textarea('comments') ?></td>
+      </tr>
+    </table>
+    <?= $this->Form->button('Submit') ?>
+    <?= $this->Form->end() ?>
   <?php else: ?>
     <?php if (isset($deliverTo)): ?>
       <table class="vertical-table">
@@ -95,8 +111,6 @@
     <?= $this->Form->textarea('message', ['rows' => 2]); ?>
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
-    <p>落札者ID： <?= $bidder_id ?></p>
-    <p>出品者ID： <?= $exhibitor_id ?></p>
   <?php endif; ?>
 <?php else: ?>
   <h2>※落札情報はありません。</h2>
