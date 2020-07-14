@@ -17,6 +17,7 @@
 		<td><?= h($info->created) ?></td>
 		<td class="actions">
 			<?= $this->Html->link(__('View'), ['action' => 'msg', $info->id]) ?>
+			 | 
 			<?= $this->Html->link(__('Contact'), ['action' => 'contact', $info->id]) ?>
 		</td>
 	</tr>
