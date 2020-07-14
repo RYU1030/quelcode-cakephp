@@ -218,6 +218,7 @@ class AuctionController extends AuctionBaseController
 			$hasRated = $this->Ratings->find()
 				->where(['bidinfo_id'=>$bidinfo_id])
 				->andWhere(['rated_by'=>$this->Auth->user('id')]);
+			$hasRated = $hasRated->first();
 		} catch (Exception $e) {
 			$hasRated = null;
 		}

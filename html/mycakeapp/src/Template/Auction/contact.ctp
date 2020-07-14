@@ -1,6 +1,8 @@
 <?php
-if ($hasRated) :?>
+  if (!empty($hasRated)) :?>
   <h1>取引完了。ご利用ありがとうございました。</h1>
+  <?= $hasRated->ratings ?>
+  <?= $hasRated->comments ?>
 <?php endif; ?>
 
 <?php if (!empty($bidinfo) && empty($hasRated)): ?>
@@ -25,7 +27,13 @@ if ($hasRated) :?>
       </tr>
     </table>
     <?php echo $this->Form->hidden('bidinfo_id', ['value' => $bidinfo->id]); ?>
-    <?php echo $this->Form->hidden('ratings_for', ['value' => $bidinfo->user_id]); ?>
+     <!-- ログイン中のユーザが出品者の場合は、落札者を評価 -->
+    <?php if ($authuser['id'] === $exhibitor_id) :?>
+      <?php echo $this->Form->hidden('ratings_for', ['value' => $bidinfo->user_id]); ?>
+    <!-- ログイン中のユーザが落札者の場合は、出品者を評価 -->
+    <?php elseif ($authuser['id'] === $bidder_id) : ?>
+      <?php echo $this->Form->hidden('ratings_for', ['value' => $bidinfo->biditem->user_id]); ?>
+    <?php endif; ?>
     <?php echo $this->Form->hidden('rated_by', ['value' => $authuser['id']]); ?>
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
