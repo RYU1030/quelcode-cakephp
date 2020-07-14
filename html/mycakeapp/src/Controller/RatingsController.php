@@ -20,7 +20,7 @@ class RatingsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Bidinfos'],
+            'contain' => ['Bidinfo'],
         ];
         $ratings = $this->paginate($this->Ratings);
 
@@ -37,7 +37,7 @@ class RatingsController extends AppController
     public function view($id = null)
     {
         $rating = $this->Ratings->get($id, [
-            'contain' => ['Bidinfos'],
+            'contain' => ['Bidinfo'],
         ]);
 
         $this->set('rating', $rating);
@@ -54,14 +54,17 @@ class RatingsController extends AppController
         if ($this->request->is('post')) {
             $rating = $this->Ratings->patchEntity($rating, $this->request->getData());
             if ($this->Ratings->save($rating)) {
-                $this->Flash->success(__('The rating has been saved.'));
+                $this->Flash->success(__('評価内容が保存されました。'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect([
+                    'controller'=>'auction', 'action' => 'contact',
+                    $rating->bidinfo_id
+                    ]);
             }
-            $this->Flash->error(__('The rating could not be saved. Please, try again.'));
+            $this->Flash->error(__('評価内容の保存に失敗しました。もう一度お試しください。'));
         }
-        $bidinfos = $this->Ratings->Bidinfos->find('list', ['limit' => 200]);
-        $this->set(compact('rating', 'bidinfos'));
+        $bidinfo = $this->Ratings->Bidinfo->find('list', ['limit' => 200]);
+        $this->set(compact('rating', 'bidinfo'));
     }
 
     /**
@@ -85,8 +88,8 @@ class RatingsController extends AppController
             }
             $this->Flash->error(__('The rating could not be saved. Please, try again.'));
         }
-        $bidinfos = $this->Ratings->Bidinfos->find('list', ['limit' => 200]);
-        $this->set(compact('rating', 'bidinfos'));
+        $bidinfo = $this->Ratings->Bidinfo->find('list', ['limit' => 200]);
+        $this->set(compact('rating', 'bidinfo'));
     }
 
     /**

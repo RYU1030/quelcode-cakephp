@@ -213,6 +213,14 @@ class AuctionController extends AuctionBaseController
 	// 取引成立後の画面
 	public function contact($bidinfo_id = null)
 	{
+		// bidinfo_idが$bidinfo_idの$ratingをRatingsテーブルから取得
+		try {
+			$hasRated = $this->Ratings->find()
+				->where(['bidinfo_id'=>$bidinfo_id])
+				->andWhere(['rated_by'=>$this->Auth->user('id')]);
+		} catch (Exception $e) {
+			$hasRated = null;
+		}
 		// idが$bidinfo_idのBidinfoを変数$bidinfoに格納
 		try {
 			$bidinfo = $this->Bidinfo->get($bidinfo_id, [
@@ -228,14 +236,17 @@ class AuctionController extends AuctionBaseController
 
 		// ログイン中のユーザIDが$permitted_idに含まれない場合は、アクセスを許可せずindexにリダイレクト
 		if (!in_array($this->Auth->user('id'), $permitted_id)) {
+			$this->Flash->error('アクセス権限がありません。');
 			return $this->redirect(['action' => 'index']);
 		}
-		// Ratingを新たに用意
-		$rating = $this->Ratings->newEntity();
+
 		// Messageを新たに用意
 		$message = $this->Messages->newEntity();
 		// deliveyInfoを新たに用意
 		$deliveryInfo = $this->Deliveries->newEntity();
+		// Ratingを新たに用意
+		$rating = $this->Ratings->newEntity();
+
 		// POST送信時の処理
 		if ($this->request->is('post')) {
 			// 送信されたフォームで$bidmsgを更新
@@ -264,7 +275,8 @@ class AuctionController extends AuctionBaseController
 
 		$this->set(compact(
 			'bidinfo_id', 'message', 'messages', 'deliveryInfo', 'deliverTo',
-			'bidinfo', 'permitted_id', 'exhibitor_id', 'bidder_id'
+			'bidinfo', 'permitted_id', 'exhibitor_id', 'bidder_id', 
+			'hasRated', 'rating'
 		));
 		
 		} catch(Exception $e) {

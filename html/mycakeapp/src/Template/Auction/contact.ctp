@@ -1,14 +1,21 @@
-<?php if (!empty($bidinfo)): ?>
+<?php
+if ($hasRated) :?>
+  <h1>取引完了。ご利用ありがとうございました。</h1>
+<?php endif; ?>
+
+<?php if (!empty($bidinfo) && empty($hasRated)): ?>
   <h2>「<?= $bidinfo->biditem->name ?>」の配送情報</h2>
   <?php if (isset($deliverTo) && (int)$deliverTo->is_shipped === 1 && (int)$deliverTo->is_received === 1) :?>
     <h3>取引完了。取引相手を評価してください。</h3>
-    <?= $this->Form->create($rating, ['controller'=>'Ratings', 'action'=>'add']) ?>
+    <?= $this->Form->create($rating,
+      ['type'=>'post',
+      'url'=>['controller'=>'Ratings', 'action'=>'add']]); ?>
     <table>
       <tr>
         <th>満足度（5段階）</th>
         <td>
-          <?= $this->Form->select('select', 
-            ['1'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5])
+          <?= $this->Form->select('ratings', 
+            [''=>'選択してください', '1'=>1, '2'=>2, '3'=>3, '4'=>4, '5'=>5])
           ?>
         </td>
       </tr>
@@ -17,6 +24,9 @@
         <td><?= $this->Form->textarea('comments') ?></td>
       </tr>
     </table>
+    <?php echo $this->Form->hidden('bidinfo_id', ['value' => $bidinfo->id]); ?>
+    <?php echo $this->Form->hidden('ratings_for', ['value' => $bidinfo->user_id]); ?>
+    <?php echo $this->Form->hidden('rated_by', ['value' => $authuser['id']]); ?>
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
   <?php else: ?>
@@ -112,6 +122,6 @@
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
   <?php endif; ?>
-<?php else: ?>
+<?php elseif (empty($bidinfo)): ?>
   <h2>※落札情報はありません。</h2>
 <?php endif; ?>
