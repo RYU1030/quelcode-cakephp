@@ -1,13 +1,30 @@
 <?php
   if (!empty($hasRated)) :?>
+  <h2>「<?= $bidinfo->biditem->name ?>」の取引評価</h2>
   <h1>取引完了。ご利用ありがとうございました。</h1>
-  <?= $hasRated->ratings ?>
-  <?= $hasRated->comments ?>
+  <table class="vertical-table">
+    <tr>
+      <th scope="row">取引相手</th>
+      <?php if ($authuser['id'] === $bidder_id) : ?>
+        <td><?= $bidinfo->biditem->user->username ?></td>
+      <?php elseif ($authuser['id'] === $exhibitor_id) : ?>
+        <td><?= $bidinfo->user->username ?></td>
+      <?php endif; ?>
+    </tr>
+    <tr>
+      <th scope="row">取引評価</th>
+      <td><?= $hasRated->ratings ?></td>
+    </tr>
+    <tr>
+      <th scope="row">取引評価コメント</th>
+      <td><?= $hasRated->comments ?></td>
+    </tr>
+  </table>  
 <?php endif; ?>
 
-<?php if (!empty($bidinfo) && empty($hasRated)): ?>
-  <h2>「<?= $bidinfo->biditem->name ?>」の配送情報</h2>
+<?php if (!empty($bidinfo) && empty($hasRated)) : ?>
   <?php if (isset($deliverTo) && (int)$deliverTo->is_shipped === 1 && (int)$deliverTo->is_received === 1) :?>
+    <h2>「<?= $bidinfo->biditem->name ?>」の取引評価</h2>
     <h3>取引完了。取引相手を評価してください。</h3>
     <?= $this->Form->create($rating,
       ['type'=>'post',
@@ -38,6 +55,7 @@
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
   <?php else: ?>
+  <h2>「<?= $bidinfo->biditem->name ?>」の配送情報</h2>
     <?php if (isset($deliverTo)): ?>
       <table class="vertical-table">
         <tr>
@@ -55,8 +73,10 @@
       </table>
       <?php if ($authuser['id'] === $bidder_id): ?>
         <?php if ((int)$deliverTo->is_shipped === 1): ?>
-          <h3>出品者様が商品を発送しました。</h3>
-          <a href="<?= $this->Url->build(['action'=>'itemReceived']); ?>?id=<?= $deliverTo->id; ?>" class="notification">受取完了</a>
+          <h5>出品者様が商品を発送しました。<br>受取完了後、下の「受取完了」を押してください。</h5>
+          <h3>
+            <a href="<?= $this->Url->build(['action'=>'itemReceived']); ?>?id=<?= $deliverTo->id; ?>" class="notification">受取完了</a>
+          </h3>
         <?php else: ?>
           <h3>商品の発送をお待ちください。</h3>
         <?php endif; ?>
@@ -64,7 +84,10 @@
         <?php if ((int)$deliverTo->is_shipped === 1) :?>
           <h3>受取完了連絡待ち。</h3>
         <?php else: ?>
-          <a href="<?= $this->Url->build(['action'=>'itemShipped']); ?>?id=<?= $deliverTo->id; ?>" class="notification">発送完了</a>
+          <p>※ 発送完了後、下の「発送完了」を押してください。</p>
+          <h3>
+            <a href="<?= $this->Url->build(['action'=>'itemShipped']); ?>?id=<?= $deliverTo->id; ?>" class="notification">発送完了</a>
+          </h3>
         <?php endif; ?>
       <?php endif; ?>
     <?php endif; ?>
@@ -98,6 +121,7 @@
           <th scope="row">受取人連絡先</th>
         </tr>
       </table>
+      <h3>※ 落札者様による配送先情報の入力待ちです。</h3>
     <?php endif; ?>
     <?= '<hr>' ?>
     <p>メッセージ</p>

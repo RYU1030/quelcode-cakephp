@@ -225,7 +225,7 @@ class AuctionController extends AuctionBaseController
 		// idが$bidinfo_idのBidinfoを変数$bidinfoに格納
 		try {
 			$bidinfo = $this->Bidinfo->get($bidinfo_id, [
-			'contain' => ['Biditems', 'Biditems.Users']
+			'contain' => ['Biditems', 'Biditems.Users', 'Users']
 		]);
 
 		// 出品者ID、落札者IDをそれぞれ定義
