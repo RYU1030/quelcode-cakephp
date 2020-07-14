@@ -26,8 +26,8 @@
             echo $this->Form->control('rated_by');
             echo $this->Form->control('ratings');
             echo $this->Form->control('comments');
-            echo $this->Form->control('created_at');
-            echo $this->Form->control('updated_at');
+            echo $this->Form->control('created');
+            echo $this->Form->control('updated');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

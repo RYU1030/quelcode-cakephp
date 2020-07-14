@@ -20,8 +20,8 @@
                 <th scope="col"><?= $this->Paginator->sort('ratings_for') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('rated_by') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('ratings') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created_at') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('updated_at') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -33,8 +33,8 @@
                 <td><?= $this->Number->format($rating->ratings_for) ?></td>
                 <td><?= $this->Number->format($rating->rated_by) ?></td>
                 <td><?= $this->Number->format($rating->ratings) ?></td>
-                <td><?= h($rating->created_at) ?></td>
-                <td><?= h($rating->updated_at) ?></td>
+                <td><?= h($rating->created) ?></td>
+                <td><?= h($rating->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $rating->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $rating->id]) ?>

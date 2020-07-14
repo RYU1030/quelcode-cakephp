@@ -37,12 +37,12 @@
             <td><?= $this->Number->format($rating->ratings) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Created At') ?></th>
-            <td><?= h($rating->created_at) ?></td>
+            <th scope="row"><?= __('Created') ?></th>
+            <td><?= h($rating->created) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Updated At') ?></th>
-            <td><?= h($rating->updated_at) ?></td>
+            <th scope="row"><?= __('Updated') ?></th>
+            <td><?= h($rating->modified) ?></td>
         </tr>
     </table>
     <div class="row">
