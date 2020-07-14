@@ -42,6 +42,11 @@ class RatingsTable extends Table
             'foreignKey' => 'bidinfo_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->belongsTo('Users', [
+            'foreignKey' => 'ratings_for',
+            'foreignKey' => 'rated_by',
+        ]);
     }
 
     /**
@@ -89,6 +94,8 @@ class RatingsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['bidinfo_id'], 'Bidinfo'));
+        $rules->add($rules->existsIn(['ratings_for'], 'Users'));
+        $rules->add($rules->existsIn(['rated_by'], 'Users'));
 
         return $rules;
     }
