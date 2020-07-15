@@ -46,9 +46,11 @@
 		<tr>
 			<th scope="row"><?= __('平均評価（5段階）') ?></th>
 			<td>
+				<!-- ユーザの評価が存在しない場合の処理 -->
 				<?php if (empty($ratings->ratingAvg)) : ?>
 					未評価
 				<?php endif; ?>
+				<!-- ユーザの評価が存在する場合は平均値を小数点第一位まで表示する -->
 				<?php if (!empty($ratings->ratingAvg)) : ?>
 					<?= round($ratings->ratingAvg, 1) ?>
 				<?php endif; ?>
@@ -57,9 +59,11 @@
 		<tr>
 			<th scope="row"><?= __('取引相手からのコメント一覧') ?></th>
 			<td>
+				<!-- ユーザの評価が存在しない場合の処理 -->
 				<?php if (empty($comments->toArray())): ?>
 					表示するコメントがありません
 				<?php endif; ?>
+				<!-- ユーザの評価が存在する場合は各コメントを表示する -->
 				<?php foreach ($comments as $comment) : ?>
 					<?= h($comment->comments) ?> <?= h($comment->created) ?>
 					<hr>
