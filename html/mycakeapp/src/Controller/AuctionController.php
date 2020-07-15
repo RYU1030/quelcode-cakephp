@@ -213,7 +213,7 @@ class AuctionController extends AuctionBaseController
 	// 取引成立後の画面
 	public function contact($bidinfo_id = null)
 	{
-		// bidinfo_idが$bidinfo_idの$ratingをRatingsテーブルから取得
+		// bidinfo_idが$bidinfo_idの$ratingをRatingsテーブルから取得し$hasRatedに格納
 		try {
 			$hasRated = $this->Ratings->find()
 				->where(['bidinfo_id'=>$bidinfo_id])
@@ -243,7 +243,7 @@ class AuctionController extends AuctionBaseController
 
 		// Messageを新たに用意
 		$message = $this->Messages->newEntity();
-		// deliveyInfoを新たに用意
+		// DeliveyInfoを新たに用意
 		$deliveryInfo = $this->Deliveries->newEntity();
 		// Ratingを新たに用意
 		$rating = $this->Ratings->newEntity();
@@ -290,7 +290,6 @@ class AuctionController extends AuctionBaseController
 		$deliveryInfo = $this->Deliveries->newEntity();
 		// POST送信時の処理
 		if ($this->request->is('post')) {
-			// 送信されたフォームで$bidmsgを更新
 			$deliveryInfo = $this->Deliveries->patchEntity($deliveryInfo, $this->request->getData());
 			// Deliveryを保存
 			if ($this->Deliveries->save($deliveryInfo)) {
@@ -300,6 +299,7 @@ class AuctionController extends AuctionBaseController
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}
 		}
+		
 	}
 
 	public function itemShipped() 
