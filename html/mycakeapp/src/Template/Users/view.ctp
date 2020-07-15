@@ -25,12 +25,15 @@
 	</nav>
 <?php endif; ?>
 <div class="users view large-9 medium-8 columns content">
+<?php if ($authuser['role'] === 'admin') : ?>
 	<h3><?= h($user->id) ?></h3>
+<?php endif; ?>
 	<table class="vertical-table">
 		<tr>
-			<th scope="row"><?= __('Username') ?></th>
+			<th scope="row"><?= __('ユーザ名') ?></th>
 			<td><?= h($user->username) ?></td>
 		</tr>
+		<?php if ($authuser['role'] === 'admin') : ?>
 		<tr>
 			<th scope="row"><?= __('Role') ?></th>
 			<td><?= h($user->role) ?></td>
@@ -39,15 +42,26 @@
 			<th scope="row"><?= __('Id') ?></th>
 			<td><?= $this->Number->format($user->id) ?></td>
 		</tr>
+		<?php endif; ?>
 		<tr>
-			<th scope="row"><?= __('Average Rating') ?></th>
-			<td><?= $this->Number->format($ratings) ?></td>
+			<th scope="row"><?= __('平均評価（5段階）') ?></th>
+			<td>
+				<?php if (empty($ratings->ratingAvg)) : ?>
+					未評価
+				<?php endif; ?>
+				<?php if (!empty($ratings->ratingAvg)) : ?>
+					<?= round($ratings->ratingAvg, 1) ?>
+				<?php endif; ?>
+			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?= __('Comments') ?></th>
+			<th scope="row"><?= __('コメント一覧') ?></th>
 			<td>
+				<?php if (empty($comments->toArray())): ?>
+					表示するコメントがありません
+				<?php endif; ?>
 				<?php foreach ($comments as $comment) : ?>
-					<?= h($comment->comments) ?>
+					<?= h($comment->comments) ?> <?= h($comment->created) ?>
 					<hr>
 				<?php endforeach; ?>
 			</td>
