@@ -55,7 +55,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?= __('コメント一覧') ?></th>
+			<th scope="row"><?= __('取引相手からのコメント一覧') ?></th>
 			<td>
 				<?php if (empty($comments->toArray())): ?>
 					表示するコメントがありません
