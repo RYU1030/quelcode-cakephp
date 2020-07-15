@@ -121,6 +121,7 @@ class UsersController extends AppController
 			'contain' => ['Bidinfo', 'Biditems', 'Bidmessages', 'Bidrequests']
 		]);
 
+		// 表示中のユーザへの平均評価を取得
 		$ratings = TableRegistry::get('Ratings');
 		$ratings = $ratings->find();
 		$ratings
@@ -128,6 +129,7 @@ class UsersController extends AppController
 			->where(['ratings_for'=>$user->id]);
 		$ratings = $ratings->toArray()[0];
 
+		// 表示中のユーザへのコメントを全取得
 		$comments = $this->Ratings->find()
 			->select(['comments', 'created'])
 			->where(['ratings_for'=>$user->id]);
