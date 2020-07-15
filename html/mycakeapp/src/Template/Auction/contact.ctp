@@ -1,4 +1,5 @@
 <?php
+  // 取引評価済みなら評価内容を表示
   if (!empty($hasRated)) :?>
   <h2>「<?= $bidinfo->biditem->name ?>」の取引評価</h2>
   <h1>取引完了。ご利用ありがとうございました。</h1>
@@ -24,6 +25,7 @@
   </table>  
 <?php endif; ?>
 
+<!-- 落札情報があり取引評価が未実施の場合の処理 -->
 <?php if (!empty($bidinfo) && empty($hasRated)) : ?>
   <?php if (isset($deliverTo) && (int)$deliverTo->is_shipped === 1 && (int)$deliverTo->is_received === 1) :?>
     <h2>「<?= $bidinfo->biditem->name ?>」の取引評価</h2>
@@ -57,7 +59,9 @@
     <?= $this->Form->button('Submit') ?>
     <?= $this->Form->end() ?>
   <?php else: ?>
+  <!-- 商品が未受取の場合は下記の処理に移行  -->
   <h2>「<?= $bidinfo->biditem->name ?>」の配送情報</h2>
+    <!-- 配送先情報が入力済みの場合はそれを表示 -->
     <?php if (isset($deliverTo)): ?>
       <table class="vertical-table">
         <tr>
@@ -73,18 +77,24 @@
           <td><?= $deliverTo->mobile_number ?></td>
         </tr>
       </table>
+      <!-- ログイン中のユーザが落札者の場合 -->
       <?php if ($authuser['id'] === $bidder_id): ?>
+        <!-- 商品発送済みの場合の表示 -->
         <?php if ((int)$deliverTo->is_shipped === 1): ?>
           <h5>出品者様が商品を発送しました。<br>受取完了後、下の「受取完了」を押してください。</h5>
           <h3>
             <a href="<?= $this->Url->build(['action'=>'itemReceived']); ?>?id=<?= $deliverTo->id; ?>" class="notification">受取完了</a>
           </h3>
+        <!-- 未発送の場合の表示 -->
         <?php else: ?>
           <h3>商品の発送をお待ちください。</h3>
         <?php endif; ?>
+      <!-- ログイン中のユーザが出品者の場合 -->
       <?php elseif ($authuser['id'] === $exhibitor_id): ?>
+        <!-- 商品発送済みの場合の表示 -->
         <?php if ((int)$deliverTo->is_shipped === 1) :?>
           <h3>受取完了連絡待ち。</h3>
+        <!-- 未発送の場合の表示 -->
         <?php else: ?>
           <p>※ 発送完了後、下の「発送完了」を押してください。</p>
           <h3>
@@ -93,6 +103,7 @@
         <?php endif; ?>
       <?php endif; ?>
     <?php endif; ?>
+    <!-- ログイン中のユーザが落札者で配送先情報が未入力の場合 -->
     <?php if ($authuser['id'] === $bidder_id && !isset($deliverTo)): ?>
       <?= $this->Form->create($deliveryInfo, ['action' => 'delivery']) ?>
       <fieldset>
@@ -111,6 +122,7 @@
       <?= $this->Form->button(__('Submit')) ?>
       <?= $this->Form->end() ?>
     <?php endif; ?>
+    <!-- ログイン中のユーザが出品者で配送先情報が未入力の場合 -->
     <?php if ($authuser['id'] === $exhibitor_id && !isset($deliverTo)): ?>
       <table class="vertical-table">
         <tr>
