@@ -11,8 +11,10 @@
         <td><?= $bidinfo->user->username ?></td>
       <?php endif; ?>
     </tr>
+    <th scope="row">取引商品</th>
+      <td><?= $bidinfo->biditem->name ?></td>
     <tr>
-      <th scope="row">取引評価</th>
+      <th scope="row">取引評価（5段階）</th>
       <td><?= $hasRated->ratings ?></td>
     </tr>
     <tr>
