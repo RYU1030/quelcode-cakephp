@@ -133,6 +133,11 @@ class AuctionController extends AuctionBaseController
 	// 入札の処理
 	public function bid($biditem_id = null)
 	{
+		$biditem = $this->Biditems->get($biditem_id);
+		if ($biditem->user_id === $this->Auth->user('id')) {
+			$this->Flash->error('自身で出品した商品には入札出来ません。');
+			return $this->redirect(['action' => 'view', $biditem_id]);
+		}
 		// 入札用のBidrequestインスタンスを用意
 		$bidrequest = $this->Bidrequests->newEntity();
 		// $bidrequestにbiditem_idとuser_idを設定
