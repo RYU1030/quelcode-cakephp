@@ -1,6 +1,32 @@
-# docker-mycakeapp2
+# CakePHP3コーディング
 
-- CakePHP 超入門のオークションアプリの docker 環境
+## アウトライン
+
+- オークションアプリに画像アップローダーとカウントダウンタイマー追加（[DB定義書](https://docs.google.com/spreadsheets/d/1psgBLaonSBDAe1zoItbJY2fbQpyIhiv8isdIQJlT6Uk/edit#gid=1040098439)/[詳細設計書](https://docs.google.com/document/d/14aayQsRjwE_tb1MvT6WkOhlcRkyMOPIovQ6XsaSqqyg/edit)）
+
+
+
+- ユーザー同士の評価機能追加（[DB定義書](https://docs.google.com/spreadsheets/d/1BLG7GD3D6XK4TEmwLR73J4uWb6j7Adx2nihxMmv3RIE/edit#gid=1905242614)/[詳細設計書](https://docs.google.com/document/d/1yJ-HUk6Ow0mlDOMIsOCU3JbbLXP2qhjHTXArx960Df0/edit)）
+
+## 実装箇所詳細
+
+- 商品の詳細情報の欄を作成...入力時のバリデーションや出力時のエスケープ処理を実装
+- オークションの出品画像アップローダーを追加...画像であるかのチェック、同時刻にアップロードがあっても別名で保存
+- オークションの終了時刻のカウントダウンタイマー追加...JavaScriptでリアルタイムでオークション終了時までをカウントする
+
+- 取引終了後のページを作成（出品者と落札者しかアクセス不可）
+- 上のページで、発送先（名前・住所・電話番号）のやり取りや、発送連絡、受取連絡が可能
+- 取引終了時（受取連絡終了時）にしか入力できない、出品者と落札者の評価（数字で１（低）〜５（高）までの数値評価とコメント）入力フォームを作成
+- 相手から入力されたレーティング（数字の平均値）と、評価コメントは各ユーザーのページから確認可能
+
+
+## 参考書籍
+[CakePHP超入門](https://www.amazon.co.jp/gp/product/B07CKHQ4KR/)
+
+## 開発環境
+```
+CakePHP3.8/Docker/MacOSX
+```
 
 ## docker 起動前の準備
 
